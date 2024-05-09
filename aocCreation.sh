@@ -2,20 +2,48 @@
 
 read -p "Enter the year for this Advent: " folder_name
 
-# Create the new folder in the src directory
-mkdir src/$folder_name
+# Check if the year folder already exists
+if [ -d "src/$folder_name" ]; then
+    echo "Year folder already exists. Creating missing subdirectories."
 
-# Create 24 subdirectories from day-1 to day-24
-for ((i=1; i<=24; i++))
-do
-    mkdir src/$folder_name/day-$i
+    # Create 24 subdirectories from day-1 to day-24 if they don't already exist
+    for ((i=1; i<=24; i++))
+    do
+        if [ ! -d "src/$folder_name/day-$i" ]; then
+            mkdir -p src/$folder_name/day-$i/Rust
+            mkdir -p src/$folder_name/day-$i/GO
+            mkdir -p src/$folder_name/day-$i/Python
+            mkdir -p src/$folder_name/day-$i/Perl
+            mkdir -p src/$folder_name/day-$i/C++
+        else
+            # Check if the sub subdirectories exist and create them if missing
+            for sub_sub_dir in Rust GO Python Perl C++
+            do
+                if [ ! -d "src/$folder_name/day-$i/$sub_sub_dir" ]; then
+                    mkdir -p src/$folder_name/day-$i/$sub_sub_dir
+                fi
+            done
+        fi
+    done
 
-    # Create 5 subdirectories within each day subdirectory
-    mkdir src/$folder_name/day-$i/Rust
-    mkdir src/$folder_name/day-$i/GO
-    mkdir src/$folder_name/day-$i/Python
-    mkdir src/$folder_name/day-$i/Perl
-    mkdir src/$folder_name/day-$i/C++
-done
+    echo "Missing subdirectories created successfully!"
+    
+else
+    # Create the new folder in the src directory
+    mkdir src/$folder_name
 
-echo "New folder and subdirectories created successfully!"
+    # Create 24 subdirectories from day-1 to day-24
+    for ((i=1; i<=24; i++))
+    do
+        mkdir src/$folder_name/day-$i
+
+        # Create 5 subdirectories within each day subdirectory
+        mkdir src/$folder_name/day-$i/Rust
+        mkdir src/$folder_name/day-$i/GO
+        mkdir src/$folder_name/day-$i/Python
+        mkdir src/$folder_name/day-$i/Perl
+        mkdir src/$folder_name/day-$i/C++
+    done
+
+    echo "New folder and subdirectories created successfully!"
+fi
